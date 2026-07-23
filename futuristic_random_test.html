@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Neon Test — Вы молодец</title>
+  <style>
+    :root {
+      --bg: #050816;
+      --panel: rgba(10, 16, 40, 0.78);
+      --line: rgba(108, 240, 255, 0.22);
+      --cyan: #6cf0ff;
+      --violet: #a86cff;
+      --pink: #ff59d6;
+      --text: #eef7ff;
+      --muted: #8fa8c6;
+      --success: #68ffba;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(82, 41, 190, 0.28), transparent 35%),
+        radial-gradient(circle at 80% 0%, rgba(0, 224, 255, 0.18), transparent 30%),
+        radial-gradient(circle at 50% 100%, rgba(255, 55, 190, 0.16), transparent 40%),
+        var(--bg);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .18;
+      background-image:
+        linear-gradient(rgba(108, 240, 255, .12) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(108, 240, 255, .12) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: linear-gradient(to bottom, black, transparent 90%);
+    }
+
+    .orb {
+      position: fixed;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: .22;
+      pointer-events: none;
+      animation: drift 10s ease-in-out infinite alternate;
+    }
+
+    .orb.one { top: 8%; left: -100px; background: var(--violet); }
+    .orb.two { right: -100px; bottom: 3%; background: var(--cyan); animation-delay: -3s; }
+
+    @keyframes drift {
+      to { transform: translate3d(70px, 40px, 0) scale(1.18); }
+    }
+
+    .shell {
+      width: min(920px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 34px 0 48px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      font-size: 12px;
+      color: var(--cyan);
+    }
+
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      clip-path: polygon(25% 0, 75% 0, 100% 25%, 100% 75%, 75% 100%, 25% 100%, 0 75%, 0 25%);
+      background: linear-gradient(135deg, rgba(108,240,255,.18), rgba(168,108,255,.18));
+      box-shadow: 0 0 24px rgba(108, 240, 255, .18);
+    }
+
+    .status {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .card {
+      position: relative;
+      overflow: hidden;
+      padding: clamp(24px, 5vw, 48px);
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      background: linear-gradient(180deg, rgba(17, 27, 62, .82), rgba(7, 13, 31, .82));
+      box-shadow:
+        0 28px 80px rgba(0, 0, 0, .42),
+        inset 0 1px 0 rgba(255, 255, 255, .05);
+      backdrop-filter: blur(18px);
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(110deg, transparent 20%, rgba(108, 240, 255, .055), transparent 60%);
+      transform: translateX(-100%);
+      animation: scan 5s linear infinite;
+    }
+
+    @keyframes scan {
+      to { transform: translateX(100%); }
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      color: var(--cyan);
+      font-size: 12px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 26px;
+      height: 1px;
+      background: currentColor;
+      box-shadow: 0 0 10px currentColor;
+    }
+
+    h1, h2 {
+      margin: 0;
+      line-height: 1.04;
+    }
+
+    h1 {
+      max-width: 720px;
+      font-size: clamp(38px, 7vw, 74px);
+      letter-spacing: -.055em;
+    }
+
+    h2 {
+      max-width: 760px;
+      font-size: clamp(29px, 5vw, 52px);
+      letter-spacing: -.04em;
+    }
+
+    .gradient-text {
+      color: transparent;
+      background: linear-gradient(90deg, var(--cyan), #fff, var(--pink));
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+
+    .lead {
+      max-width: 680px;
+      margin: 20px 0 28px;
+      color: var(--muted);
+      font-size: clamp(16px, 2vw, 19px);
+      line-height: 1.65;
+    }
+
+    .btn {
+      appearance: none;
+      border: 0;
+      border-radius: 14px;
+      padding: 15px 21px;
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+      color: #031018;
+      background: linear-gradient(90deg, var(--cyan), #baffff);
+      box-shadow: 0 0 28px rgba(108, 240, 255, .24);
+      transition: transform .2s ease, box-shadow .2s ease, opacity .2s ease;
+    }
+
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 0 38px rgba(108, 240, 255, .4); }
+    .btn:active { transform: translateY(0); }
+    .btn.secondary {
+      color: var(--text);
+      background: rgba(255,255,255,.06);
+      border: 1px solid var(--line);
+      box-shadow: none;
+    }
+
+    .progress-wrap {
+      margin-bottom: 30px;
+    }
+
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .progress {
+      height: 7px;
+      border-radius: 99px;
+      background: rgba(255,255,255,.06);
+      overflow: hidden;
+    }
+
+    .progress > span {
+      display: block;
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--cyan), var(--violet), var(--pink));
+      box-shadow: 0 0 16px rgba(108, 240, 255, .6);
+      transition: width .35s ease;
+    }
+
+    .answers {
+      display: grid;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .answer {
+      width: 100%;
+      position: relative;
+      text-align: left;
+      padding: 17px 18px 17px 52px;
+      border: 1px solid rgba(108, 240, 255, .15);
+      border-radius: 15px;
+      color: var(--text);
+      background: rgba(255,255,255,.035);
+      font: inherit;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+
+    .answer::before {
+      content: attr(data-index);
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 23px;
+      height: 23px;
+      display: grid;
+      place-items: center;
+      border-radius: 7px;
+      color: var(--cyan);
+      background: rgba(108, 240, 255, .08);
+      border: 1px solid rgba(108, 240, 255, .22);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .answer:hover {
+      transform: translateX(5px);
+      border-color: rgba(108, 240, 255, .5);
+      background: rgba(108, 240, 255, .075);
+      box-shadow: 0 0 26px rgba(108, 240, 255, .08);
+    }
+
+    .answer.selected {
+      border-color: var(--pink);
+      background: rgba(255, 89, 214, .10);
+    }
+
+    .result {
+      text-align: center;
+      padding: 18px 0 4px;
+    }
+
+    .result-ring {
+      width: min(230px, 62vw);
+      aspect-ratio: 1;
+      margin: 8px auto 28px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      position: relative;
+      background:
+        radial-gradient(circle, rgba(6, 15, 30, .94) 56%, transparent 57%),
+        conic-gradient(var(--cyan), var(--violet), var(--pink), var(--cyan));
+      box-shadow: 0 0 70px rgba(108, 240, 255, .2);
+      animation: pulse 2.4s ease-in-out infinite;
+    }
+
+    .result-ring::before {
+      content: "";
+      position: absolute;
+      inset: 12px;
+      border-radius: 50%;
+      border: 1px dashed rgba(255,255,255,.22);
+      animation: spin 12s linear infinite;
+    }
+
+    .result-icon {
+      font-size: 72px;
+      filter: drop-shadow(0 0 22px rgba(104, 255, 186, .35));
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes pulse { 50% { transform: scale(1.025); } }
+
+    .result h2 {
+      margin-inline: auto;
+      font-size: clamp(42px, 8vw, 78px);
+    }
+
+    .result p {
+      margin: 18px auto 28px;
+      max-width: 620px;
+      color: var(--muted);
+      line-height: 1.65;
+      font-size: 18px;
+    }
+
+    .hidden { display: none !important; }
+
+    .fade-in {
+      animation: fadeIn .45s ease both;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .footer-note {
+      margin-top: 18px;
+      text-align: center;
+      color: #617795;
+      font-size: 12px;
+    }
+
+    @media (max-width: 560px) {
+      .shell { padding-top: 18px; }
+      .topbar { align-items: flex-start; }
+      .status { text-align: right; }
+      .card { border-radius: 20px; padding: 22px; }
+      .answer { padding-right: 14px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="orb one"></div>
+  <div class="orb two"></div>
+
+  <main class="shell">
+    <div class="topbar">
+      <div class="brand">
+        <span class="brand-mark">N</span>
+        Neon Assessment
+      </div>
+      <div class="status">SYSTEM ONLINE · RANDOM MODE</div>
+    </div>
+
+    <section class="card">
+      <div id="startScreen" class="fade-in">
+        <div class="eyebrow">Нейро-тест v4.2</div>
+        <h1>Узнайте свой <span class="gradient-text">секретный результат</span></h1>
+        <p class="lead">
+          Каждый запуск формирует новый набор вопросов и перемешивает варианты ответов.
+          Выбирайте то, что ближе — система обработает ваш уникальный цифровой профиль.
+        </p>
+        <button class="btn" id="startBtn">Начать тест →</button>
+      </div>
+
+      <div id="quizScreen" class="hidden">
+        <div class="progress-wrap">
+          <div class="progress-meta">
+            <span id="counter">Вопрос 1 из 10</span>
+            <span id="percent">10%</span>
+          </div>
+          <div class="progress"><span id="progressBar"></span></div>
+        </div>
+
+        <div id="questionContent" class="fade-in">
+          <div class="eyebrow" id="questionTag">Сценарий 01</div>
+          <h2 id="questionText">Вопрос</h2>
+          <div class="answers" id="answers"></div>
+        </div>
+      </div>
+
+      <div id="resultScreen" class="hidden result fade-in">
+        <div class="result-ring">
+          <div class="result-icon">✓</div>
+        </div>
+        <div class="eyebrow">Анализ завершён</div>
+        <h2 class="gradient-text">Вы молодец!</h2>
+        <p>
+          Система обработала все ответы и пришла к однозначному выводу:
+          у вас отличный выбор, сильная интуиция и всё получается правильно.
+        </p>
+        <button class="btn" id="restartBtn">Пройти ещё раз</button>
+      </div>
+    </section>
+
+    <div class="footer-note">Ответы выбираются случайно · Итог гарантированно позитивный</div>
+  </main>
+
+  <script>
+    const questionPool = [
+      {
+        q: "Какой режим лучше описывает ваше текущее состояние?",
+        a: ["Фокус на максимуме", "Спокойное наблюдение", "Творческий хаос", "Режим неожиданного успеха"]
+      },
+      {
+        q: "Как вы обычно принимаете важные решения?",
+        a: ["По интуиции", "После анализа", "Мгновенно", "Пусть решит случай"]
+      },
+      {
+        q: "Какой цвет энергии вам ближе сегодня?",
+        a: ["Неоновый голубой", "Глубокий фиолетовый", "Яркий розовый", "Абсолютно чёрный"]
+      },
+      {
+        q: "Выберите идеальный способ начать новое дело.",
+        a: ["Сразу действовать", "Составить план", "Найти вдохновение", "Сначала выпить кофе"]
+      },
+      {
+        q: "Какой навык у вас сейчас прокачан сильнее всего?",
+        a: ["Скорость реакции", "Логика", "Креативность", "Умение не сдаваться"]
+      },
+      {
+        q: "Что вы сделаете, если система выдаст ошибку?",
+        a: ["Перезапущу", "Найду причину", "Сделаю вид, что так задумано", "Превращу ошибку в функцию"]
+      },
+      {
+        q: "Какая атмосфера помогает вам работать?",
+        a: ["Полная тишина", "Музыка и неон", "Лёгкий шум вокруг", "Любая — я адаптируюсь"]
+      },
+      {
+        q: "Выберите символ ближайшего успеха.",
+        a: ["Молния", "Космический корабль", "Кристалл", "Зелёная галочка"]
+      },
+      {
+        q: "Какой вариант звучит наиболее убедительно?",
+        a: ["Это точно сработает", "Нужно проверить", "Попробуем другой путь", "Уже почти готово"]
+      },
+      {
+        q: "Что важнее в сложной задаче?",
+        a: ["Терпение", "Скорость", "Точность", "Хорошее настроение"]
+      },
+      {
+        q: "Как бы вы назвали свой внутренний алгоритм?",
+        a: ["Quantum Focus", "Neon Mind", "Ultra Logic", "Lucky Engine"]
+      },
+      {
+        q: "На каком уровне находится ваша решительность?",
+        a: ["Стабильные 100%", "Выше нормы", "Постоянно растёт", "Секретный уровень"]
+      },
+      {
+        q: "Какой ответ выглядит самым правильным?",
+        a: ["Первый", "Второй", "Третий", "Тот, который я выберу"]
+      },
+      {
+        q: "Выберите оптимальную стратегию движения вперёд.",
+        a: ["Маленькими шагами", "Большим рывком", "Через эксперименты", "Уверенно и красиво"]
+      },
+      {
+        q: "Что происходит, когда вы видите сложную задачу?",
+        a: ["Появляется интерес", "Включается логика", "Растёт энергия", "Задача начинает нервничать"]
+      },
+      {
+        q: "Какой показатель важнее всего?",
+        a: ["Результат", "Прогресс", "Опыт", "Удовольствие от процесса"]
+      },
+      {
+        q: "Какой финал вы ожидаете?",
+        a: ["Отличный", "Неожиданно отличный", "Максимально отличный", "Лучше всех ожиданий"]
+      },
+      {
+        q: "Выберите источник дополнительной мощности.",
+        a: ["Кофе", "Музыка", "Любопытство", "Уверенность"]
+      }
+    ];
+
+    const TOTAL_QUESTIONS = 10;
+    let questions = [];
+    let current = 0;
+    let selectedAnswers = [];
+
+    const startScreen = document.getElementById("startScreen");
+    const quizScreen = document.getElementById("quizScreen");
+    const resultScreen = document.getElementById("resultScreen");
+    const questionContent = document.getElementById("questionContent");
+    const questionText = document.getElementById("questionText");
+    const questionTag = document.getElementById("questionTag");
+    const answers = document.getElementById("answers");
+    const counter = document.getElementById("counter");
+    const percent = document.getElementById("percent");
+    const progressBar = document.getElementById("progressBar");
+
+    function shuffle(array) {
+      return [...array].sort(() => Math.random() - 0.5);
+    }
+
+    function prepareTest() {
+      questions = shuffle(questionPool)
+        .slice(0, TOTAL_QUESTIONS)
+        .map(item => ({ ...item, a: shuffle(item.a) }));
+
+      current = 0;
+      selectedAnswers = [];
+    }
+
+    function startTest() {
+      prepareTest();
+      startScreen.classList.add("hidden");
+      resultScreen.classList.add("hidden");
+      quizScreen.classList.remove("hidden");
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      const item = questions[current];
+      const number = current + 1;
+      const progress = Math.round((number / TOTAL_QUESTIONS) * 100);
+
+      counter.textContent = `Вопрос ${number} из ${TOTAL_QUESTIONS}`;
+      percent.textContent = `${progress}%`;
+      progressBar.style.width = `${progress}%`;
+      questionTag.textContent = `Сценарий ${String(number).padStart(2, "0")}`;
+      questionText.textContent = item.q;
+
+      answers.innerHTML = "";
+      item.a.forEach((text, index) => {
+        const button = document.createElement("button");
+        button.className = "answer";
+        button.dataset.index = String.fromCharCode(65 + index);
+        button.textContent = text;
+        button.addEventListener("click", () => selectAnswer(button, text));
+        answers.appendChild(button);
+      });
+
+      questionContent.classList.remove("fade-in");
+      void questionContent.offsetWidth;
+      questionContent.classList.add("fade-in");
+    }
+
+    function selectAnswer(button, value) {
+      document.querySelectorAll(".answer").forEach(btn => {
+        btn.disabled = true;
+        btn.classList.remove("selected");
+      });
+
+      button.classList.add("selected");
+      selectedAnswers.push(value);
+
+      setTimeout(() => {
+        current++;
+        if (current < TOTAL_QUESTIONS) {
+          renderQuestion();
+        } else {
+          showResult();
+        }
+      }, 340);
+    }
+
+    function showResult() {
+      quizScreen.classList.add("hidden");
+      resultScreen.classList.remove("hidden");
+      resultScreen.classList.remove("fade-in");
+      void resultScreen.offsetWidth;
+      resultScreen.classList.add("fade-in");
+    }
+
+    document.getElementById("startBtn").addEventListener("click", startTest);
+    document.getElementById("restartBtn").addEventListener("click", startTest);
+  </script>
+</body>
+</html>
