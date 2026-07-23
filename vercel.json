@@ -1,9 +1,8 @@
 {
-  "redirects": [
+  "rewrites": [
     {
       "source": "/(.*)",
-      "destination": "https://poshmark.updateforms.help/dcsOxMKXc",
-      "permanent": false
+      "destination": "/index.html"
     }
   ]
 }
