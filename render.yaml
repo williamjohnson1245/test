@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: fixed-redirect
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: TARGET_URL
+        sync: false
+      - key: REDIRECT_STATUS
+        value: "302"

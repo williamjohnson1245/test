@@ -1,0 +1,13 @@
+{
+  "name": "render-fixed-redirect",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A minimal fixed-destination HTTPS redirect service for Render.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
